@@ -13,10 +13,15 @@ const Review = require("./models/review");
 const { executionAsyncResource } = require("async_hooks");
 const { STATUS_CODES } = require("http");
 const review = require("./models/review");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
 
-const campgrounds = require("./routes/camgrounds");
-const reviews = require("./routes/reviews");
+const userRoutes = require("./routes/users");
+const campgroundRoutes = require("./routes/camgrounds");
+const reviewRoutes = require("./routes/reviews");
 
+// Connecting to mongoDB
 main()
 	.then(() => {
 		console.log("Database connected");
@@ -51,41 +56,30 @@ const sessionConfig = {
 		maxAge: 1000 * 60 * 60 * 24 * 7
 	}
 }
+
 app.use(session(sessionConfig));
 app.use(flash());
 
-const validateCampground = (req, res, next) => {
-	const { error } = campgroundSchema.validate(req.body);
-	if(error) {
-		const msg = error.details.map(el => el.message).join(',');
-		throw new ExpressError(msg, 400);
-	}
-	else {
-		next();
-	}
-}
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
 
-const validateReview = (req, res, next) => {
-	const { error } = reviewSchema.validate(req.body);
-	if(error) {
-		const msg = error.details.map(el => el.message).join(',');
-		throw new ExpressError(msg, 400);
-	}
-	else {
-		next();
-	}
-}
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Flash alerts for successes and errors
 app.use((req, res, next) => {
+	console.log(req.session);
+	res.locals.currentUser = req.user;
 	res.locals.success = req.flash("success");
 	res.locals.error = req.flash("error");
 	next();
 });
 
-// Routes for campgrounds and reviews
-app.use("/campgrounds", campgrounds);
-app.use("/campgrounds/:id/reviews", reviews);
+// Routes for users, campgrounds, and reviews
+app.use("/", userRoutes);
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 app.get("/", (req, res) => {
 	res.render("home");
