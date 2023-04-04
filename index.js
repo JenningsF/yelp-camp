@@ -18,7 +18,7 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 
 const userRoutes = require("./routes/users");
-const campgroundRoutes = require("./routes/camgrounds");
+const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 
 // Connecting to mongoDB
