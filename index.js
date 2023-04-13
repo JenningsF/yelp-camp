@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !=="production") {
+	require("dotenv").config();
+}
+
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -32,6 +36,7 @@ main()
 	});
 
 async function main() {
+	mongoose.set("strictQuery", true);
 	await mongoose.connect("mongodb://localhost:27017/yelp-camp");
 }
 
