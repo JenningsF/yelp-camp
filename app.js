@@ -2,30 +2,28 @@ if (process.env.NODE_ENV !== "production") {
 	require("dotenv").config();
 }
 
+// Imported node modules
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
-const { campgroundSchema, reviewSchema } = require("./schemas.js");
-const catchAsync = require("./utils/catchAsync");
-const ExpressError = require("./utils/ExpressError");
 const methodOverride = require("method-override");
-const Campground = require("./models/campground");
-const Review = require("./models/review");
-const { executionAsyncResource } = require("async_hooks");
 const { STATUS_CODES } = require("http");
-const review = require("./models/review");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const User = require("./models/user");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 
+// Imported routes
 const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
+
+// Imported User model and ExpressError utility
+const User = require("./models/user");
+const ExpressError = require("./utils/ExpressError");
 
 // Connecting to mongoDB
 main()
@@ -91,20 +89,24 @@ app.use("/", userRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
 
+// Renders home page
 app.get("/", (req, res) => {
 	res.render("home");
 });
 
+// Handles 404 error
 app.all("*", (req, res, next) => {
 	next(new ExpressError("Page Not Found", 404));
 });
 
+// Error handler
 app.use((err, req, res, next) => {
 	const { statusCode = 500 } = err;
 	if (!err.message) err.message = "Something went wrong";
 	res.status(statusCode).render("error", { err });
 });
 
+// App is listening on port for connections
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
 	console.log(`Serving to http://localhost:${port}/`);

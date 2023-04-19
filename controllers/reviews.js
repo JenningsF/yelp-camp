@@ -1,6 +1,9 @@
+// Controller for handling reviews routes
+
 const Campground = require("../models/campground");
 const Review = require("../models/review");
 
+// Creates review
 module.exports.createReview = async (req, res) => {
 	const campground = await Campground.findById(req.params.id);
 	const review = new Review(req.body.review);
@@ -12,6 +15,7 @@ module.exports.createReview = async (req, res) => {
 	res.redirect(`/campgrounds/${campground._id}`);
 };
 
+// Deletes review
 module.exports.deleteReview = async (req, res) => {
 	const { id, reviewId } = req.params;
 	console.log(req.params);

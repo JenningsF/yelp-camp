@@ -1,3 +1,5 @@
+// Script for Mapbox map displayed on each campground page
+
 mapboxgl.accessToken = mapToken;
 const map = new mapboxgl.Map({
 	container: "map", // container ID

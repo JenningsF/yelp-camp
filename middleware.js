@@ -3,6 +3,7 @@ const Review = require("./models/review");
 const { campgroundSchema, reviewSchema } = require("./schemas");
 const ExpressError = require("./utils/ExpressError");
 
+// Middleware to check if user is logged in
 module.exports.isLoggedIn = (req, res, next) => {
 	if (!req.isAuthenticated()) {
 		req.session.returnTo = req.originalUrl;
@@ -12,6 +13,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 	next();
 };
 
+// Middleware to validate a campground against it's schema
 module.exports.validateCampground = (req, res, next) => {
 	const { error } = campgroundSchema.validate(req.body);
 	if (error) {
@@ -22,6 +24,7 @@ module.exports.validateCampground = (req, res, next) => {
 	}
 };
 
+// Middlware to check if user is the author of a campground
 module.exports.isAuthor = async (req, res, next) => {
 	const { id } = req.params;
 	const campground = await Campground.findById(id);
@@ -32,6 +35,7 @@ module.exports.isAuthor = async (req, res, next) => {
 	next();
 };
 
+// Middlware to check if user is the author of a review
 module.exports.isReviewAuthor = async (req, res, next) => {
 	const { id, reviewId } = req.params;
 	const review = await Review.findById(reviewId);
@@ -42,6 +46,7 @@ module.exports.isReviewAuthor = async (req, res, next) => {
 	next();
 };
 
+// Middleware to validate a review against it's schema
 module.exports.validateReview = (req, res, next) => {
 	const { error } = reviewSchema.validate(req.body);
 	if (error) {
@@ -52,6 +57,7 @@ module.exports.validateReview = (req, res, next) => {
 	}
 };
 
+// Middleware to pass the returnTo URL from session to locals
 module.exports.checkReturnTo = (req, res, next) => {
 	if (req.session.returnTo) {
 		res.locals.returnTo = req.session.returnTo;

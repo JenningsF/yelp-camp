@@ -1,14 +1,17 @@
+// Routes for campgrounds
+
+// Imported node modules
 const express = require('express');
 const router = express.Router();
+const multer  = require('multer');
+
+// Imported local utilities
 const campgrounds = require("../controllers/campgrounds")
 const catchAsync = require("../utils/catchAsync");
-// const { campgroundSchema, reviewSchema } = require("../schemas.js");
-// const ExpressError = require("../utils/ExpressError");
-const Campground = require("../models/campground");
 const { isLoggedIn, validateCampground, isAuthor } = require("../middleware");
-const multer  = require('multer');
 const { storage } = require("../cloudinary");
-const campground = require('../models/campground');
+
+// Multer is used to upload images to cloudinary
 const upload = multer({ storage });
 
 router.route("/")

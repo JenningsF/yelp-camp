@@ -1,5 +1,10 @@
+// Routes for users
+
+// Imported node module
 const express = require("express");
 const router = express.Router();
+
+// Imported local utilities
 const users = require("../controllers/users");
 const passport = require("passport");
 const catchAsync = require("../utils/catchAsync");

@@ -1,3 +1,5 @@
+// Script to validate forms used on pages
+
 (function () {
     'use strict'
 

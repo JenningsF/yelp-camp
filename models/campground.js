@@ -1,18 +1,24 @@
+// Model for campground
+
 const mongoose = require("mongoose");
 const Review = require("./review");
 const Schema = mongoose.Schema;
 
+// Schema for images added to campground
 const ImageSchema = new Schema({
 	url: String,
 	filename: String,
 });
 
+// Virtual property for image to display thumbnails when editing
 ImageSchema.virtual("thumbnail").get(function () {
 	return this.url.replace("/upload", "/upload/w_200");
 });
 
+// Option to allow virtual properties in CampgroundSchema
 const opts = { toJSON: { virtuals: true } };
 
+// Schema for campground
 const CampgroundSchema = new Schema({
 	title: String,
 	images: [ImageSchema],
@@ -42,6 +48,7 @@ const CampgroundSchema = new Schema({
 	],
 }, opts);
 
+// Virtual property to display pop up window on cluster map
 CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
 	return `
 	<strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>
