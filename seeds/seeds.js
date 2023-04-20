@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const cities = require("./cities");												// Uncomment if using cities instead of parks
-const parks = require("./parks");
+const cities = require("./cities");												// Use for cities
+const parks = require("./parks");												// Use for parks
 const { places, descriptors } = require("./seedHelpers");
 const Campground = require("../models/campground");
 
@@ -21,11 +21,12 @@ async function main() {
 
 const seedDatabase = async () => {
 	await Campground.deleteMany({});
-	for (let i = 0; i < 100; i++) {
-		const randomNum = Math.floor(Math.random() * parks.length);
-		// const randomNum = Math.floor(Math.random() * cities.length);			// Uncomment if using cities instead of parks
+	const numberOfCampgrounds = 150;											// Change the number of campgrounds created
+	for (let i = 0; i < numberOfCampgrounds; i++) {
 		const price = Math.floor(Math.random() * 20) + 10;
-		// const { city, state, longitude, latitude } = cities[randomNum];		// Uncomment if using cities instead of parks
+		// const randomNum = Math.floor(Math.random() * parks.length);			// Use for parks
+		const randomNum = Math.floor(Math.random() * cities.length);			// Use for cities
+		const { city, state, longitude, latitude } = cities[randomNum];			// Use for cities
 		const camp = new Campground({
 			title: `${sample(descriptors)} ${sample(places)}`,
 			images: [
@@ -34,16 +35,16 @@ const seedDatabase = async () => {
 					filename: "YelpCamp/uj8vnaw9iwbyg2uzrxln",
 				},
 			],
-			// geometry: {														// Uncomment if using cities instead of parks
-			// 	type: "Point",
-			// 	coordinates: [`${longitude}`, `${latitude}`],
-			// },
-			geometry: parks[randomNum].geometry,
+			geometry: {															// Creates geometry data from cities
+				type: "Point",
+				coordinates: [`${longitude}`, `${latitude}`],
+			},
+			// geometry: parks[randomNum].geometry,								// Pulls geometry data from parks
 			price,
 			description:
 				"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat eaque recusandae ipsam ut. Sit sint deserunt hic illum dolore libero, autem vel culpa distinctio nobis aliquam rem tempore atque? Quas.",
-			location: parks[randomNum].properties.Name,
-			// location: `${city}, ${state}`,									// Uncomment if using cities instead of parks
+			// location: parks[randomNum].properties.Name,						// Use for parks
+			location: `${city}, ${state}`,										// Use for cities
 			author: "6439bcaacb9542b05c018149",
 		});
 		await camp.save();
