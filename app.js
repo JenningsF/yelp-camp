@@ -1,3 +1,5 @@
+// Main app for YelpCamp
+
 if (process.env.NODE_ENV !== "production") {
 	require("dotenv").config();
 }
