@@ -35,6 +35,7 @@ const databaseUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
 main()
 	.then(() => {
 		console.log("Database connected");
+		console.log(`Connected to: ${databaseUrl}`);
 	})
 	.catch((err) => {
 		console.log("Database connection error");

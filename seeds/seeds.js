@@ -4,9 +4,13 @@ const parks = require("./parks");												// Use for parks
 const { places, descriptors } = require("./seedHelpers");
 const Campground = require("../models/campground");
 
+// URL to MongoDB database used for prod or local database for dev
+const databaseUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
+
 main()
 	.then(() => {
 		console.log("Database connected");
+		console.log(`Connected to: ${databaseUrl}`);
 	})
 	.catch((err) => {
 		console.log("Database connection error");
@@ -15,8 +19,9 @@ main()
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
+
 async function main() {
-	await mongoose.connect("mongodb://localhost:27017/yelp-camp");
+	await mongoose.connect(databaseUrl);
 }
 
 const seedDatabase = async () => {
@@ -45,7 +50,7 @@ const seedDatabase = async () => {
 				"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat eaque recusandae ipsam ut. Sit sint deserunt hic illum dolore libero, autem vel culpa distinctio nobis aliquam rem tempore atque? Quas.",
 			// location: parks[randomNum].properties.Name,						// Use for parks
 			location: `${city}, ${state}`,										// Use for cities
-			author: "6439bcaacb9542b05c018149",
+			author: "644147b274ea32f8d62dd9bc",	// Insert _id of author
 		});
 		await camp.save();
 	}
