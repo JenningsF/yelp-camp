@@ -8,6 +8,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const methodOverride = require("method-override");
 const { STATUS_CODES } = require("http");
@@ -25,6 +26,9 @@ const reviewRoutes = require("./routes/reviews");
 const User = require("./models/user");
 const ExpressError = require("./utils/ExpressError");
 
+// URL to MongoDB database used for prod or local database for dev
+const databaseUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
+
 // Connecting to mongoDB
 main()
 	.then(() => {
@@ -35,9 +39,10 @@ main()
 		console.log(err);
 	});
 
+
 async function main() {
 	mongoose.set("strictQuery", true);
-	await mongoose.connect("mongodb://localhost:27017/yelp-camp");
+	await mongoose.connect(databaseUrl);
 }
 
 const app = express();
@@ -51,21 +56,34 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
+// 
+const secret = process.env.SECRET ||"thisshouldbeabettersecret";
+
+const store = MongoStore.create({
+	mongoUrl: databaseUrl,
+	touchAfter: 24 * 3600					// Session is updated every 24 hours
+})
+
+store.on("error", function (e) {
+	console.log("Session store Error", e);
+})
+
 // Creates cookie for session
 const sessionConfig = {
+	store,
 	name: "session",
-	secret: "thisshouldbeabettersecret", // Dummy secret for dev
-	resave: false,
-	saveUninitialized: true,
+	secret,
+	saveUninitialized: false,				// Don't create session until something stored
+  	resave: false,							// Don't save session if unmodified
 	cookie: {
 		HttpOnly: true,
 		// secure: true,
-		expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-		maxAge: 1000 * 60 * 60 * 24 * 7,
+		maxAge: 1000 * 60 * 60 * 24,		// Cookie lasts for 24 hours
 	},
 };
 
 app.use(session(sessionConfig));
+
 app.use(flash());
 app.use(helmet({ contentSecurityPolicy: false }));
 
