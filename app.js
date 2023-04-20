@@ -74,7 +74,7 @@ store.on("error", function (e) {
 const sessionConfig = {
 	store,
 	name: "session",
-	secret,
+	secret: secret,
 	saveUninitialized: false,				// Don't create session until something stored
   	resave: false,							// Don't save session if unmodified
 	cookie: {
