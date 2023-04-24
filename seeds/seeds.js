@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
-const cities = require("./cities");
+const cities = require("./cities");												// Use for cities
+const parks = require("./parks");												// Use for parks
 const { places, descriptors } = require("./seedHelpers");
 const Campground = require("../models/campground");
+
+// URL to MongoDB database used for prod or local database for dev
+const databaseUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
 
 main()
 	.then(() => {
 		console.log("Database connected");
+		console.log(`Connected to: ${databaseUrl}`);
 	})
 	.catch((err) => {
 		console.log("Database connection error");
@@ -14,17 +19,38 @@ main()
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
+
 async function main() {
-	await mongoose.connect("mongodb://localhost:27017/yelp-camp");
+	await mongoose.connect(databaseUrl);
 }
 
 const seedDatabase = async () => {
 	await Campground.deleteMany({});
-	for (let i = 0; i < 50; i++) {
-		const randomNum = Math.floor(Math.random() * 1000);
+	const numberOfCampgrounds = 150;											// Change the number of campgrounds created
+	for (let i = 0; i < numberOfCampgrounds; i++) {
+		const price = Math.floor(Math.random() * 20) + 10;
+		// const randomNum = Math.floor(Math.random() * parks.length);			// Use for parks
+		const randomNum = Math.floor(Math.random() * cities.length);			// Use for cities
+		const { city, state, longitude, latitude } = cities[randomNum];			// Use for cities
 		const camp = new Campground({
-			location: `${cities[randomNum].city}, ${cities[randomNum].state}`,
 			title: `${sample(descriptors)} ${sample(places)}`,
+			images: [
+				{
+					url: "https://res.cloudinary.com/dnooojjwn/image/upload/v1680717521/YelpCamp/uj8vnaw9iwbyg2uzrxln.jpg",
+					filename: "YelpCamp/uj8vnaw9iwbyg2uzrxln",
+				},
+			],
+			geometry: {															// Creates geometry data from cities
+				type: "Point",
+				coordinates: [`${longitude}`, `${latitude}`],
+			},
+			// geometry: parks[randomNum].geometry,								// Pulls geometry data from parks
+			price,
+			description:
+				"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat eaque recusandae ipsam ut. Sit sint deserunt hic illum dolore libero, autem vel culpa distinctio nobis aliquam rem tempore atque? Quas.",
+			// location: parks[randomNum].properties.Name,						// Use for parks
+			location: `${city}, ${state}`,										// Use for cities
+			author: "644147b274ea32f8d62dd9bc",	// Insert _id of author
 		});
 		await camp.save();
 	}
