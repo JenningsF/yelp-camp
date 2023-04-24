@@ -14,18 +14,18 @@ This is a project to learn and practice full stack web development. Project orig
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#built-with-&#x1F3D7;">Built With</a>
+      <a href="#built-with-">Built With</a>
     </li>
     <li>
-      <a href="#getting-started-&#x1F4BB;">Getting Started</a>
+      <a href="#getting-started-">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#running-app-&#x1F680;">Running App</a></li>
-    <li><a href="#contact-&#x2709;">Contact</a></li>
-    <li><a href="#acknowlegements-&#x1F64C;">Acknowledgments</a></li>
+    <li><a href="#running-app-">Running App</a></li>
+    <li><a href="#contact-">Contact</a></li>
+    <li><a href="#acknowlegements-">Acknowledgments</a></li>
   </ol>
 </details>
 
