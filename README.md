@@ -204,7 +204,7 @@ Big thanks to [Colt Steele][colt-url] in putting in the time and effort to creat
 [Render-shield]: https://img.shields.io/badge/Render-323330?style=flat-square&logo=Render&logoColor=46E3B7
 [Render-url]: https://render.com/
 [LinkedIn-shield]: https://img.shields.io/badge/LinkedIn-323330?style=for-the-badge&logo=linkedin&logoColor=0077B5
-[LinkedIn-url]: https://www.linkedin.com/in/jennings-fairchild/
+[LinkedIn-url]: https://www.linkedin.com/in/jenningsf/
 [ProtonMail-shield]: https://img.shields.io/badge/ProtonMail-323330?style=for-the-badge&logo=protonmail&logoColor=8B89CC
 [ProtonMail-url]: mailto:jenningsf@protonmail.com
 [Telegram-shield]: https://img.shields.io/badge/Telegram-323330?style=for-the-badge&logo=telegram&logoColor=26A5E4
